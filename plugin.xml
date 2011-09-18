@@ -2,24 +2,32 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         id="com.github.wiiclipse.DevkitPPCScannerConfig"
+         id="com.github.wiiclipse.scannerConfig"
          name="%extension.name"
          point="org.eclipse.cdt.make.core.ScannerConfigurationDiscoveryProfile">
       <scannerInfoCollector
-            class="com.github.wiiclipse.managedbuild.scannerinfo.GCCScannerInfoCollector"
+            class="com.github.wiiclipse.managedbuild.WiiClipseScannerInfoCollector"
             scope="project">
       </scannerInfoCollector>
       <scannerInfoProvider
-            providerId="DevkitPPCScannerConfig">
+            providerId="com.github.wiiclipse.scannerConfig">
          <run
                arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}"
-               class="com.github.wiiclipse.managedbuild.scannerinfo.SpecsRunScannerInfoProvider"
+               class="com.github.wiiclipse.managedbuild.WiiClipseSpecsRunScannerInfoProvider"
                command="powerpc-eabi-gcc">
          </run>
          <scannerInfoConsoleParser
                class="org.eclipse.cdt.make.internal.core.scannerconfig.gnu.GCCSpecsConsoleParser">
          </scannerInfoConsoleParser>
       </scannerInfoProvider>
+   </extension>
+   <extension
+         id="com.github.wiiclipse.extSettings"
+         name="WiiClipseCExternalSettingsProvider"
+         point="org.eclipse.cdt.core.externalSettingsProvider">
+      <provider
+            class="com.github.wiiclipse.managedbuild.WiiClipseCExternalSettingsProvider">
+      </provider>
    </extension>
    <extension
          id="com.github.wiiclipse.managedbuild"
@@ -359,10 +367,11 @@
                browseType="none"
                category="com.github.wiiclipse.linker.option.category.libs"
                command="-l"
+               defaultValue="ogc"
                id="com.github.wiiclipse.linker.option.libs"
                isAbstract="false"
                name="%Option.Libs"
-               resourceFilter="all"
+               value="ogc"
                valueType="libs">
          </option>
          <option
@@ -424,8 +433,11 @@
             superClass="com.github.wiiclipse.linker.base">
          <inputType
                id="com.github.wiiclipse.c.linker.input"
-               scannerConfigDiscoveryProfileId="com.github.wiiclipse.DevkitPPCScannerConfig"
                superClass="cdt.managedbuild.tool.gnu.c.linker.input">
+            <additionalInput
+                  kind="additionalinputdependency"
+                  paths="$(USER_OBJS)">
+            </additionalInput>
          </inputType>
       </tool>
       <tool
@@ -436,7 +448,7 @@
             superClass="com.github.wiiclipse.linker.base">
          <inputType
                id="com.github.wiiclipse.cpp.linker.input"
-               scannerConfigDiscoveryProfileId="com.github.wiiclipse.DevkitPPCScannerConfig"
+               scannerConfigDiscoveryProfileId="com.github.wiiclipse.scannerConfig"
                superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
          </inputType>
       </tool>
@@ -447,7 +459,8 @@
             superClass="com.github.wiiclipse.compiler.base">
          <inputType
                id="com.github.wiiclipse.c.compiler.input"
-               scannerConfigDiscoveryProfileId="com.github.wiiclipse.DevkitPPCScannerConfig"
+               languageId="org.eclipse.cdt.core.gcc"
+               scannerConfigDiscoveryProfileId="com.github.wiiclipse.scannerConfig"
                superClass="cdt.managedbuild.tool.gnu.c.compiler.input">
          </inputType>
       </tool>
@@ -459,7 +472,7 @@
             superClass="com.github.wiiclipse.compiler.base">
          <inputType
                id="com.github.wiiclipse.cpp.compiler.input"
-               scannerConfigDiscoveryProfileId="com.github.wiiclipse.DevkitPPCScannerConfig"
+               scannerConfigDiscoveryProfileId="com.github.wiiclipse.scannerConfig"
                superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input">
          </inputType>
       </tool>
@@ -494,9 +507,7 @@
       <tool
             command="powerpc-eabi-ar"
             id="com.github.wiiclipse.archiver"
-            isAbstract="true"
-            name="%ToolName.archiver"
-            natureFilter="both">
+            name="%ToolName.archiver">
          <supportedProperties>
             <property
                   id="org.eclipse.cdt.build.core.buildArtefactType">
@@ -537,16 +548,16 @@
          <outputType
                buildVariable="ARCHIVES"
                id="com.github.wiiclipse.archiver.output"
-               outputNames="${BuildArtifactFileBaseName}"
                outputPrefix="lib"
                outputs="a"
                primaryOutput="true">
          </outputType>
       </tool>
       <toolChain
+            configurationEnvironmentSupplier="com.github.wiiclipse.managedbuild.WiiClipseEnvironmentVariableSupplier"
             id="com.github.wiiclipse.toolchain.base"
             name="%Toolchain.Name"
-            scannerConfigDiscoveryProfileId="com.github.wiiclipse.DevkitPPCScannerConfig">
+            scannerConfigDiscoveryProfileId="com.github.wiiclipse.scannerConfig">
          <builder
                id="com.github.wiiclipse.toolchain.builder.base"
                superClass="cdt.managedbuild.target.gnu.builder">

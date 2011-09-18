@@ -1,4 +1,4 @@
-package com.github.wiiclipse.managedbuild.scannerinfo;
+package com.github.wiiclipse.managedbuild;
 
 import org.eclipse.cdt.make.core.scannerconfig.IScannerInfoCollector3;
 import org.eclipse.cdt.make.internal.core.scannerconfig2.PerProjectSICollector;
@@ -12,6 +12,6 @@ import org.eclipse.cdt.managedbuilder.scannerconfig.IManagedScannerInfoCollector
  * 
  * @since 2.0
  */
-@SuppressWarnings({ "unchecked", "restriction" })
-public class GCCScannerInfoCollector extends PerProjectSICollector implements IScannerInfoCollector3, IManagedScannerInfoCollector {
+@SuppressWarnings("restriction")
+public class WiiClipseScannerInfoCollector extends PerProjectSICollector implements IScannerInfoCollector3, IManagedScannerInfoCollector {
 }
