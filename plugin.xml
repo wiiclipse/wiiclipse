@@ -6,11 +6,11 @@
          name="%extension.name"
          point="org.eclipse.cdt.make.core.ScannerConfigurationDiscoveryProfile">
       <scannerInfoCollector
-            class="com.github.wiiclipse.managedbuild.WiiClipseScannerInfoCollector"
+            class="org.eclipse.cdt.managedbuilder.internal.scannerconfig.DefaultGCCScannerInfoCollector"
             scope="project">
       </scannerInfoCollector>
       <scannerInfoProvider
-            providerId="com.github.wiiclipse.scannerConfig">
+            providerId="com.github.wiiclipse.scannerConfigProvider">
          <run
                arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}"
                class="com.github.wiiclipse.managedbuild.WiiClipseSpecsRunScannerInfoProvider"
@@ -367,12 +367,14 @@
                browseType="none"
                category="com.github.wiiclipse.linker.option.category.libs"
                command="-l"
-               defaultValue="ogc"
                id="com.github.wiiclipse.linker.option.libs"
                isAbstract="false"
                name="%Option.Libs"
-               value="ogc"
-               valueType="libs">
+               valueType="stringList">
+            <listOptionValue
+                  builtIn="false"
+                  value="ogc">
+            </listOptionValue>
          </option>
          <option
                browseType="directory"
@@ -410,15 +412,14 @@
          <option
                browseType="file"
                category="com.github.wiiclipse.linker.option.category.other"
-               id="com.github.wiiclipse.linker.option.other.userobjs"
+               id="com.github.wiiclipse.linker.option.other.userObjs"
                isAbstract="false"
                name="%Option.Linker.UserObjs"
-               resourceFilter="file"
                valueType="userObjs">
          </option>
          <outputType
                buildVariable="EXECUTABLES"
-               id="com.github.wiiclipse.toolchain.linker.output"
+               id="com.github.wiiclipse.toolchain.linker.output.elf"
                multipleOfType="false"
                outputNames="${BuildArtifactFileBaseName}.elf"
                outputs="elf"
@@ -438,6 +439,10 @@
                   kind="additionalinputdependency"
                   paths="$(USER_OBJS)">
             </additionalInput>
+            <additionalInput
+                  kind="additionalinput"
+                  paths="$(LIBS)">
+            </additionalInput>
          </inputType>
       </tool>
       <tool
@@ -451,6 +456,13 @@
                scannerConfigDiscoveryProfileId="com.github.wiiclipse.scannerConfig"
                superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
          </inputType>
+      </tool>
+      <tool
+            command="powerpc-eabi-as"
+            id="com.github.wiiclipse.assembler"
+            name="%ToolName.assembler"
+            natureFilter="both"
+            superClass="cdt.managedbuild.tool.gnu.assembler">
       </tool>
       <tool
             command="powerpc-eabi-gcc"
@@ -488,6 +500,13 @@
                   value="org.eclipse.cdt.build.core.buildArtefactType.exe">
             </checkBuildProperty>
          </enablement>
+         <supportedProperties>
+            <property
+                  id="org.eclipse.cdt.build.core.buildArtefactType">
+               <value
+                     id="org.eclipse.cdt.build.core.buildArtefactType.exe"></value>
+            </property>
+         </supportedProperties>
          <inputType
                buildVariable="EXECUTABLES"
                id="com.github.wiiclipse.elf2dol.input"
@@ -548,10 +567,18 @@
          <outputType
                buildVariable="ARCHIVES"
                id="com.github.wiiclipse.archiver.output"
+               outputNames="lib${BuildArtifactFileBaseName}.a"
                outputPrefix="lib"
                outputs="a"
                primaryOutput="true">
          </outputType>
+         <enablement
+               type="ALL">
+            <checkBuildProperty
+                  property="org.eclipse.cdt.build.core.buildArtefactType"
+                  value="org.eclipse.cdt.build.core.buildArtefactType.staticLib">
+            </checkBuildProperty>
+         </enablement>
       </tool>
       <toolChain
             configurationEnvironmentSupplier="com.github.wiiclipse.managedbuild.WiiClipseEnvironmentVariableSupplier"
@@ -566,6 +593,11 @@
                binaryParser="org.eclipse.cdt.core.ELF"
                id="com.github.wiiclipse.toolchain.platform.base">
          </targetPlatform>
+         <tool
+               id="com.github.wiiclipse.toolchain.assembler.base"
+               isAbstract="false"
+               superClass="com.github.wiiclipse.assembler">
+         </tool>
          <tool
                id="com.github.wiiclipse.toolchain.c.compiler.base"
                superClass="com.github.wiiclipse.c.compiler">
@@ -591,11 +623,22 @@
                isAbstract="false"
                superClass="com.github.wiiclipse.archiver">
          </tool>
+         <supportedProperties>
+            <property
+                  id="org.eclipse.cdt.build.core.buildArtefactType">
+               <value
+                     id="org.eclipse.cdt.build.core.buildArtefactType.staticLib"></value>
+               <value
+                     id="org.eclipse.cdt.build.core.buildArtefactType.exe">
+               </value>
+            </property>
+         </supportedProperties>
       </toolChain>
       <configuration
             cleanCommand="rm -Rf"
             errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser"
-            id="com.github.wiiclipse.config.base">
+            id="com.github.wiiclipse.config.base"
+            name="%ConfigName.Default">
          <enablement
                attribute="artifactExtension"
                extensionAdjustment="false"
@@ -609,68 +652,24 @@
                attribute="artifactExtension"
                extensionAdjustment="false"
                type="CONTAINER_ATTRIBUTE"
-               value="elf">
-            <and>
-               <checkBuildProperty
-                     property="org.eclipse.cdt.build.core.buildArtefactType"
-                     value="org.eclipse.cdt.build.core.buildArtefactType.exe">
-               </checkBuildProperty>
-               <checkBuildProperty
-                     property="org.eclipse.cdt.build.core.buildType"
-                     value="org.eclipse.cdt.build.core.buildType.debug">
-               </checkBuildProperty>
-            </and>
-         </enablement>
-         <enablement
-               attribute="artifactExtension"
-               extensionAdjustment="false"
-               type="CONTAINER_ATTRIBUTE"
                value="dol">
-            <and>
-               <checkBuildProperty
-                     property="org.eclipse.cdt.build.core.buildArtefactType"
-                     value="org.eclipse.cdt.build.core.buildArtefactType.exe">
-               </checkBuildProperty>
-               <checkBuildProperty
-                     property="org.eclipse.cdt.build.core.buildType"
-                     value="org.eclipse.cdt.build.core.buildType.release">
-               </checkBuildProperty>
-            </and>
+            <checkBuildProperty
+                  property="org.eclipse.cdt.build.core.buildArtefactType"
+                  value="org.eclipse.cdt.build.core.buildArtefactType.exe">
+            </checkBuildProperty>
          </enablement>
-      </configuration>
-      <configuration
-            buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug"
-            id="com.github.wiiclipse.config.debug.base"
-            name="%ConfigName.Debug"
-            parent="com.github.wiiclipse.config.base">
-      </configuration>
-      <configuration
-            buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release"
-            id="com.github.wiiclipse.config.release.base"
-            name="%ConfigName.Release"
-            parent="com.github.wiiclipse.config.base">
       </configuration>
       <projectType
             buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.staticLib"
             id="com.github.wiiclipse.target.lib"
             isAbstract="false">
          <configuration
-               buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.staticLib"
-               id="com.github.wiiclipse.config.lib.debug"
-               parent="com.github.wiiclipse.config.debug.base">
-            <toolChain
-                  id="com.github.wiiclipse.toolchain.lib.debug"
-                  isAbstract="false"
-                  superClass="com.github.wiiclipse.toolchain.base">
-            </toolChain>
-         </configuration>
-         <configuration
                artifactExtension="a"
                buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.staticLib"
-               id="com.github.wiiclipse.config.lib.release"
-               parent="com.github.wiiclipse.config.release.base">
+               id="com.github.wiiclipse.config.lib"
+               parent="com.github.wiiclipse.config.base">
             <toolChain
-                  id="com.github.wiiclipse.toolchain.lib.release"
+                  id="com.github.wiiclipse.toolchain.lib"
                   isAbstract="false"
                   superClass="com.github.wiiclipse.toolchain.base">
             </toolChain>
@@ -681,23 +680,12 @@
             id="com.github.wiiclipse.target.exe"
             isAbstract="false">
          <configuration
-               artifactExtension="elf"
-               buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe"
-               id="com.github.wiiclipse.config.exe.debug"
-               parent="com.github.wiiclipse.config.debug.base">
-            <toolChain
-                  id="com.github.wiiclipse.toolchain.exe.debug"
-                  isAbstract="false"
-                  superClass="com.github.wiiclipse.toolchain.base">
-            </toolChain>
-         </configuration>
-         <configuration
                artifactExtension="dol"
                buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe"
-               id="com.github.wiiclipse.config.exe.release"
-               parent="com.github.wiiclipse.config.release.base">
+               id="com.github.wiiclipse.config.exe"
+               parent="com.github.wiiclipse.config.base">
             <toolChain
-                  id="com.github.wiiclipse.toolchain.exe.release"
+                  id="com.github.wiiclipse.toolchain.exe"
                   isAbstract="false"
                   superClass="com.github.wiiclipse.toolchain.base">
             </toolChain>

@@ -2,6 +2,7 @@ package com.github.wiiclipse.managedbuild;
 
 import org.eclipse.cdt.make.core.scannerconfig.IScannerInfoCollector3;
 import org.eclipse.cdt.make.internal.core.scannerconfig2.PerProjectSICollector;
+import org.eclipse.cdt.managedbuilder.internal.scannerconfig.DefaultGCCScannerInfoCollector;
 import org.eclipse.cdt.managedbuilder.scannerconfig.IManagedScannerInfoCollector;
 
 /**
@@ -13,5 +14,5 @@ import org.eclipse.cdt.managedbuilder.scannerconfig.IManagedScannerInfoCollector
  * @since 2.0
  */
 @SuppressWarnings("restriction")
-public class WiiClipseScannerInfoCollector extends PerProjectSICollector implements IScannerInfoCollector3, IManagedScannerInfoCollector {
+public class WiiClipseScannerInfoCollector extends DefaultGCCScannerInfoCollector implements IScannerInfoCollector3, IManagedScannerInfoCollector {
 }
