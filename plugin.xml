@@ -426,6 +426,7 @@
                buildVariable="EXECUTABLES"
                id="com.github.wiiclipse.toolchain.linker.output.elf"
                multipleOfType="false"
+               outputContentType="org.eclipse.cdt.core.executableFile"
                outputNames="${BuildArtifactFileBaseName}.elf"
                outputs="elf"
                primaryOutput="true">
@@ -531,6 +532,7 @@
                buildVariable="DOL"
                id="com.github.wiiclipse.elf2dol.output"
                multipleOfType="false"
+               outputContentType="org.eclipse.cdt.core.executableFile"
                outputNames="${BuildArtifactFileBaseName}.dol"
                outputs="dol"
                primaryOutput="true">
@@ -705,6 +707,33 @@
             </toolChain>
          </configuration>
       </projectType>
+   </extension>
+   <extension
+         point="org.eclipse.debug.core.launchConfigurationTypes">
+      <launchConfigurationType
+            delegate="com.github.wiiclipse.launcher.WiiClipseLaunchConfigurationDelegate"
+            id="com.github.wiiclipse.launcher.config"
+            modes="run"
+            name="%LauncherName">
+      </launchConfigurationType>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            class="com.github.wiiclipse.launcher.WiiClipseLaunchConfigurationTabGroup"
+            id="com.github.wiiclipse.launcher.tabs"
+            type="com.github.wiiclipse.launcher.config">
+      </launchConfigurationTabGroup>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchShortcuts">
+      <shortcut
+            class="com.github.wiiclipse.plugin.LaunchShortcut2"
+            id="com.github.wiiclipse.plugin.shortcut2"
+            label="label"
+            modes="com.github.wiiclipse.plugin.shortcut2">
+         <enablement></enablement>
+      </shortcut>
    </extension>
 
 </plugin>
