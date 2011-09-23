@@ -25,7 +25,7 @@ public class WiiClipsePlugin extends Plugin implements
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		System.out.println("START");
+//		System.out.println("START");
 		CoreModel.getDefault().addCProjectDescriptionListener(this,
 				CProjectDescriptionEvent.ABOUT_TO_APPLY);
 	}
@@ -33,7 +33,7 @@ public class WiiClipsePlugin extends Plugin implements
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		super.stop(context);
-		System.out.println("STOP");
+//		System.out.println("STOP");
 		CoreModel.getDefault().removeCProjectDescriptionListener(this);
 	}
 
@@ -49,9 +49,9 @@ public class WiiClipsePlugin extends Plugin implements
 
 	@Override
 	public void handleEvent(CProjectDescriptionEvent event) {
-		System.out.println(event);
-		ICProjectDescription cProjDesc = event.getNewCProjectDescription();
-		ICConfigurationDescription[] configurations = cProjDesc
+//		System.out.println(event);
+		ICProjectDescription projDesc = event.getNewCProjectDescription();
+		ICConfigurationDescription[] configurations = projDesc
 				.getConfigurations();
 		for (ICConfigurationDescription config : configurations) {
 			System.out.println(config);

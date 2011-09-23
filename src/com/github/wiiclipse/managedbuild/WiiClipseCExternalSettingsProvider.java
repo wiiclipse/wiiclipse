@@ -21,7 +21,7 @@ public class WiiClipseCExternalSettingsProvider extends
 	@Override
 	public CExternalSetting[] getSettings(IProject project,
 			ICConfigurationDescription cfg) {
-		System.out.println("Getting Settings for " + cfg);
+//		System.out.println("Getting Settings for " + cfg);
 
 		CExternalSetting includePathSetting;
 		CExternalSetting libraryPathSetting;

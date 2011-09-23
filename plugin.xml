@@ -6,7 +6,7 @@
          name="%extension.name"
          point="org.eclipse.cdt.make.core.ScannerConfigurationDiscoveryProfile">
       <scannerInfoCollector
-            class="org.eclipse.cdt.managedbuilder.internal.scannerconfig.DefaultGCCScannerInfoCollector"
+            class="com.github.wiiclipse.managedbuild.WiiClipseScannerInfoCollector"
             scope="project">
       </scannerInfoCollector>
       <scannerInfoProvider
@@ -270,6 +270,7 @@
     </outputType>
       </tool>
       <tool
+            commandLinePattern="${COMMAND} ${INPUTS} ${FLAGS} ${OUTPUT_FLAG}${OUTPUT_PREFIX}${OUTPUT}"
             errorParsers="org.eclipse.cdt.core.GLDErrorParser"
             id="com.github.wiiclipse.linker.base"
             isAbstract="true"
@@ -282,6 +283,10 @@
                </value>
             </property>
          </supportedProperties>
+         <envVarBuildPath
+               pathType="buildpathLibrary"
+               variableList="LIBRARY_PATH">
+         </envVarBuildPath>
          <enablement
                type="ALL">
             <checkBuildProperty
@@ -337,7 +342,7 @@
                browseType="file"
                category="com.github.wiiclipse.linker.option.category.debug"
                command="-Wl,-Map,"
-               defaultValue="${BuildArtifactFileBaseName}.map"
+               defaultValue="$@.map"
                id="com.github.wiiclipse.linker.option.debug.mapfile"
                isAbstract="false"
                name="%Option.Linker.MapFile"
@@ -455,6 +460,14 @@
                id="com.github.wiiclipse.cpp.linker.input"
                scannerConfigDiscoveryProfileId="com.github.wiiclipse.scannerConfig"
                superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
+            <additionalInput
+                  kind="additionalinputdependency"
+                  paths="$(USER_OBJS)">
+            </additionalInput>
+            <additionalInput
+                  kind="additionalinput"
+                  paths="$(LIBS)">
+            </additionalInput>
          </inputType>
       </tool>
       <tool
@@ -553,6 +566,7 @@
                id="com.github.wiiclipse.archiver.input"
                multipleOfType="true"
                primaryInput="true"
+               scannerConfigDiscoveryProfileId="com.github.wiiclipse.scannerConfig"
                sourceContentType="org.eclipse.cdt.managedbuilder.core.compiledObjectFile"
                sources="o">
             <additionalInput
