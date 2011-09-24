@@ -12,10 +12,15 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.6.0",
  org.eclipse.core.resources;bundle-version="3.6.1",
  org.eclipse.debug.core,
  org.eclipse.debug.ui,
- org.eclipse.cdt.launch;bundle-version="6.1.0"
-Bundle-Activator: com.github.wiiclipse.managedbuild.WiiClipsePlugin
+ org.eclipse.cdt.launch;bundle-version="6.1.0",
+ com.github.wiiclipse.core;bundle-version="1.0.0",
+ org.eclipse.cdt.debug.ui;bundle-version="7.0.0"
+Bundle-Activator: com.github.wiiclipse.core.WiiClipsePlugin
 Bundle-ActivationPolicy: lazy
-Import-Package: org.eclipse.swt,
+Import-Package: org.eclipse.cdt.debug.core,
+ org.eclipse.jface.viewers,
+ org.eclipse.swt,
  org.eclipse.swt.events,
  org.eclipse.swt.layout,
- org.eclipse.swt.widgets
+ org.eclipse.swt.widgets,
+ org.eclipse.ui

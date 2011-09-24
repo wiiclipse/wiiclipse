@@ -13,6 +13,8 @@ import org.eclipse.cdt.core.settings.model.extension.CExternalSettingProvider;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 
+import com.github.wiiclipse.core.WiiClipsePathResolver;
+
 public class WiiClipseCExternalSettingsProvider extends
 		CExternalSettingProvider {
 

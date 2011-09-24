@@ -1,4 +1,4 @@
-package com.github.wiiclipse.managedbuild;
+package com.github.wiiclipse.core;
 
 import java.io.File;
 

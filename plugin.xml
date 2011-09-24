@@ -728,11 +728,13 @@
    <extension
          point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut
-            class="com.github.wiiclipse.plugin.LaunchShortcut2"
-            id="com.github.wiiclipse.plugin.shortcut2"
-            label="label"
-            modes="com.github.wiiclipse.plugin.shortcut2">
-         <enablement></enablement>
+            class="org.eclipse.cdt.debug.internal.ui.launch.CApplicationLaunchShortcut"
+            id="com.github.wiiclipse.launcher.shortcut"
+            label="Wii Application"
+            modes="run">
+         <configurationType
+               id="com.github.wiiclipse.launcher.config">
+         </configurationType>
       </shortcut>
    </extension>
 

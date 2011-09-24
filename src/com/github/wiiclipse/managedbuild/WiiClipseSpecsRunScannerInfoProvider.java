@@ -5,6 +5,8 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 
+import com.github.wiiclipse.core.WiiClipsePathResolver;
+
 
 @SuppressWarnings("restriction")
 public class WiiClipseSpecsRunScannerInfoProvider extends GCCSpecsRunSIProvider {

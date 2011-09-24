@@ -8,6 +8,8 @@ import org.eclipse.cdt.managedbuilder.envvar.IConfigurationEnvironmentVariableSu
 import org.eclipse.cdt.managedbuilder.envvar.IEnvironmentVariableProvider;
 import org.eclipse.core.runtime.IPath;
 
+import com.github.wiiclipse.core.WiiClipsePathResolver;
+
 public class WiiClipseEnvironmentVariableSupplier implements
 		IConfigurationEnvironmentVariableSupplier {
 
