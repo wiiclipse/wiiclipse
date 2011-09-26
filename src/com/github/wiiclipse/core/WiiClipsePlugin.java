@@ -70,14 +70,17 @@ public class WiiClipsePlugin extends Plugin implements
 
 					config.setExternalSettingsProviderIds(extSettingProviders
 							.toArray(new String[0]));
+					config.updateExternalSettingsProviders(extSettingProviders
+							.toArray(new String[0]));
 				} else if (extSettingProviders
 						.contains(WiiClipseCExternalSettingsProvider.ID)) {
 					extSettingProviders
 							.remove(WiiClipseCExternalSettingsProvider.ID);
 					config.setExternalSettingsProviderIds(extSettingProviders
 							.toArray(new String[0]));
+					config.updateExternalSettingsProviders(extSettingProviders
+							.toArray(new String[0]));
 				}
-				config.updateExternalSettingsProviders(new String[] { WiiClipseCExternalSettingsProvider.ID });
 			}
 		}
 	}

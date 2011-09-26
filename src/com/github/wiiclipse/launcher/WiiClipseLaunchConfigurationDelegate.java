@@ -28,7 +28,6 @@ public class WiiClipseLaunchConfigurationDelegate extends
 	@Override
 	public void launch(ILaunchConfiguration config, String mode,
 			ILaunch launch, IProgressMonitor monitor) throws CoreException {
-		IBinaryObject exeFile = null;
 		if (monitor == null) {
 			monitor = new NullProgressMonitor();
 		}
@@ -38,6 +37,7 @@ public class WiiClipseLaunchConfigurationDelegate extends
 			return;
 		}
 		try {
+			IBinaryObject exeFile = null;
 			monitor.worked(1);
 			IPath exePath = CDebugUtils.verifyProgramPath(config);
 			ICProject project = CDebugUtils.verifyCProject(config);
@@ -70,6 +70,8 @@ public class WiiClipseLaunchConfigurationDelegate extends
 			monitor.worked(9);
 			DebugPlugin.newProcess(launch, process,
 					renderProcessLabel(commandArray[0]));
+		} catch (Exception e) {
+			//TODO log error
 		} finally {
 			monitor.done();
 		}
