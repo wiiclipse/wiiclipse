@@ -1,0 +1,10 @@
+#!/usr/bin/env python
+import os, sys
+
+input = sys.stdin
+output = sys.stdout
+for s in input:
+	if s.startswith("Bundle-Version:"):
+		s="Bundle-Version: 1.0.0.qualifier\n"
+
+	output.write(s)
