@@ -1,1 +1,2 @@
 *.MF filter=version
+build.properties filter=qualifier
