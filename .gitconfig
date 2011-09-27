@@ -1,3 +1,0 @@
-[filter "version"]
-	clean = .git_filter/version.clean
-	smudge = .git_filter/version.smudge
