@@ -1,15 +1,13 @@
 #!/usr/bin/env python
-import os, sys, commands, time
+import os, sys, commands
 
-version=commands.getoutput('git describe --abbrev=0')
-version=version+"-"
 qualifier=commands.getoutput('git describe')
-qualifier=qualifier.lstrip(version)
-
+pos=qualifier.find("-")
+qualifier=qualifier[pos+1:]
 input = sys.stdin
 output = sys.stdout
 for s in input:
 	if s.startswith("qualifier="):
-		s="qualifier=" + qualifier + "\n"
+		s="qualifier=r" + qualifier + "\n"
 
 	output.write(s)
