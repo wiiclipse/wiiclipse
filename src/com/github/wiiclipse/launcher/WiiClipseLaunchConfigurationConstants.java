@@ -10,5 +10,5 @@ public interface WiiClipseLaunchConfigurationConstants {
 	public static final String HOSTNAME_DEFAULT = "192.168.0.1";
 
 	public static final String ATTR_DEVICE = "Connection.Device";
-	public static final String DEVICE_DEFAULT = "192.168.0.1";
+	public static final String DEVICE_DEFAULT = "/dev/ttyUSB0";
 }
