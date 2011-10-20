@@ -82,7 +82,7 @@ public class WiiClipseLaunchConfigurationTab extends CMainTab {
 		_connectionModeBox.setLayoutData(gridData);
 
 		_hostNameLabel = new Label(group, SWT.NONE);
-		_hostNameLabel.setText("Hostname/IP Adress:");
+		_hostNameLabel.setText("Hostname/IP Address:");
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.BEGINNING;
 		_hostNameLabel.setLayoutData(gridData);
