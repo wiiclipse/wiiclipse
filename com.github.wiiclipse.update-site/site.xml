@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description name="Wiiclipse Update Site" url="http://wiiclipse.github.com/update-site/">
+      Wiiclipse Update Site
+   </description>
+   <feature url="features/com.github.wiiclipse_1.0.0.201109271702.jar" id="com.github.wiiclipse" version="1.0.0.201109271702" os="linux,macosx,win32">
+      <category name="wiiclipse"/>
+   </feature>
+   <category-def name="wiiclipse" label="WiiClipse">
+      <description>
+         WiiClipse Eclipse Plugin
+      </description>
+   </category-def>
+</site>

@@ -1,0 +1,9 @@
+[alias]
+	co = checkout
+	ci = commit -a
+[filter "version"]
+	clean = .git_filters/version.clean
+	smudge = .git_filters/version.smudge
+[filter "qualifier"]
+	clean = .git_filters/qualifier.clean
+	smudge = .git_filters/qualifier.smudge
