@@ -7,3 +7,6 @@
 [filter "qualifier"]
 	clean = .git_filters/qualifier.clean
 	smudge = .git_filters/qualifier.smudge
+[filter "MANIFEST"]
+	clean = .git_filters/MANIFEST.clean
+	smudge = .git_filters/MANIFEST.smudge

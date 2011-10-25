@@ -3,7 +3,7 @@
    <description name="Wiiclipse Update Site" url="http://wiiclipse.github.com/update-site/">
       Wiiclipse Update Site
    </description>
-   <feature url="features/com.github.wiiclipse_1.0.0.201109271702.jar" id="com.github.wiiclipse" version="1.0.0.201109271702" os="linux,macosx,win32">
+   <feature url="features/com.github.wiiclipse_1.0.0.201110251438.jar" id="com.github.wiiclipse" version="1.0.0.201110251438" os="linux,macosx,win32">
       <category name="wiiclipse"/>
    </feature>
    <category-def name="wiiclipse" label="WiiClipse">

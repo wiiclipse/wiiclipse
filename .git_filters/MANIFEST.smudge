@@ -1,0 +1,11 @@
+#!/usr/bin/env python
+import os, sys, commands
+
+version=commands.getoutput('git describe')
+input = sys.stdin
+output = sys.stdout
+for s in input:
+	if s.startswith("Bundle-Version:"):
+		s="Bundle-Version: " + version + "\n"
+
+	output.write(s)

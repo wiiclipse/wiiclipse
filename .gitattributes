@@ -1,2 +1,2 @@
-*.MF filter=version
+MANIFEST.MF filter=MANIFEST
 build.properties filter=qualifier
