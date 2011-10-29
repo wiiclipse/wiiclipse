@@ -1,11 +1,15 @@
 #!/usr/bin/env python
 import os, sys, commands
 
-version=commands.getoutput('git describe')
+desc=commands.getoutput('git describe')
+
+pos=desc.find("-")
+version=desc[:pos-1]
+qualifier=desc[pos+1:]
 input = sys.stdin
 output = sys.stdout
 for s in input:
 	if s.startswith("Bundle-Version:"):
-		s="Bundle-Version: " + version + "\n"
+		s="Bundle-Version: " + version + "." + qualifier +"\n"
 
 	output.write(s)
