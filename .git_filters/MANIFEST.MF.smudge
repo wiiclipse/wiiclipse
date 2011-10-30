@@ -4,7 +4,7 @@ import os, sys, commands
 desc=commands.getoutput('git describe')
 
 pos=desc.find("-")
-version=desc[:pos-1]
+version=desc[:pos]
 qualifier=desc[pos+1:]
 input = sys.stdin
 output = sys.stdout

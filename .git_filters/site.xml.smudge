@@ -1,0 +1,23 @@
+#!/usr/bin/env python
+import os, sys, commands, re
+
+desc=commands.getoutput('git describe')
+
+pos=desc.find("-")
+version=desc[:pos]
+qualifier=desc[pos+1:]
+version= version+'.'+qualifier
+url_replacement='\\1url="features/com.github.wiiclipse_'+version+'.jar"\\2'
+input = sys.stdin
+output = sys.stdout
+p = re.compile('(<feature[^>]*)url=\"[^\"]*\"([^>]*>)', re.DOTALL)
+buffer = ''
+for s in input:
+  buffer += s
+
+
+buffer = p.sub(url_replacement, buffer)
+
+output.write(buffer)
+
+

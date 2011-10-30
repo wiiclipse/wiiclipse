@@ -1,0 +1,15 @@
+#!/usr/bin/env python
+import os, sys, commands, re
+
+input = sys.stdin
+output = sys.stdout
+url='\\1url="features/com.github.wiiclipse_1.0.0.qualifier.jar"\\2'
+p = re.compile('(<feature[^>]*)url=\"[^\"]*\"([^>]*>)', re.DOTALL)
+buffer = ''
+for s in input:
+  buffer += s
+
+
+buffer = p.sub(url, buffer)
+
+output.write(buffer)

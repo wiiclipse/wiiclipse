@@ -1,2 +1,4 @@
-MANIFEST.MF filter=MANIFEST
-build.properties filter=qualifier
+MANIFEST.MF filter=MANIFEST.MF
+feature.xml filter=feature.xml
+site.xml filter=site.xml
+
