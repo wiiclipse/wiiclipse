@@ -3,13 +3,16 @@ import os, sys, commands, re
 
 input = sys.stdin
 output = sys.stdout
+version='\\1version="1.0.0.qualifier"\\2';
 url='\\1url="features/com.github.wiiclipse_1.0.0.qualifier.jar"\\2'
-p = re.compile('(<feature[^>]*)url=\"[^\"]*\"([^>]*>)', re.DOTALL)
+p_url = re.compile('(<feature[^>]*)url=\"[^\"]*\"([^>]*>)', re.DOTALL)
+p_version = re.compile('(<feature[^>]*)version=\"[^\"]*\"([^>]*>)', re.DOTALL)
 buffer = ''
 for s in input:
   buffer += s
 
 
-buffer = p.sub(url, buffer)
+buffer = p_url.sub(url, buffer)
+buffer = p_version.sub(version, buffer)
 
 output.write(buffer)
