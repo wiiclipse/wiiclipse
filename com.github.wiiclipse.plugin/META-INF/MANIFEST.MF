@@ -19,4 +19,5 @@ Import-Package: org.eclipse.cdt.debug.core,
  org.eclipse.swt.events,
  org.eclipse.swt.layout,
  org.eclipse.swt.widgets,
- org.eclipse.ui
+ org.eclipse.ui,
+ org.eclipse.ui.plugin
