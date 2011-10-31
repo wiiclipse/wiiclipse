@@ -3,7 +3,7 @@
       id="com.github.wiiclipse"
       label="WiiClipse"
       version="1.0.0.qualifier"
-      provider-name="com.github.wiiclipse">
+      provider-name="WiiClipse">
 
    <description url="http://wiiclipse.github.com">
       WiiClipse adds support for the DevkitPPC Toolchain to the Eclipse CDT Managed Build System.
@@ -708,20 +708,34 @@ Public License instead of this License.  But first, please read
    </url>
 
    <requires>
-      <import plugin="org.eclipse.core.runtime" version="3.6.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.cdt.core" version="5.2.1" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.cdt.managedbuilder.core" version="7.0.2" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.cdt.core"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.debug.core"/>
+      <import plugin="org.eclipse.cdt.launch"/>
+      <import plugin="org.eclipse.cdt.debug.ui"/>
       <import plugin="org.eclipse.debug.ui"/>
-      <import plugin="org.eclipse.cdt.launch" version="6.1.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.cdt.debug.core"/>
-      <import plugin="org.eclipse.jface"/>
-      <import plugin="org.eclipse.swt"/>
-      <import plugin="org.eclipse.ui.ide"/>
-      <import plugin="org.eclipse.ui.workbench"/>
+      <import plugin="org.eclipse.cdt.managedbuilder.core"/>
    </requires>
 
    <plugin
-         id="com.github.wiiclipse.plugin"
+         id="com.github.wiiclipse.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.github.wiiclipse.launch"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.github.wiiclipse.managedbuild"
          download-size="0"
          install-size="0"
          version="0.0.0"
