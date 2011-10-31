@@ -15,7 +15,7 @@
             delegate="com.github.wiiclipse.launch.WiiClipseLaunchConfigurationDelegate"
             id="com.github.wiiclipse.launch.delegate"
             modes="run"
-            name="Wii Application"
+            name="%launchDelegate.name"
             sourceLocatorId="org.eclipse.cdt.debug.core.sourceLocator"
             sourcePathComputerId="org.eclipse.cdt.debug.core.sourcePathComputer"
             type="com.github.wiiclipse.launch.config">
@@ -26,7 +26,7 @@
       <launchConfigurationType
             id="com.github.wiiclipse.launch.config"
             modes="run"
-            name="%LauncherName"
+            name="%Launcher.Name"
             public="true">
       </launchConfigurationType>
    </extension>
@@ -45,7 +45,7 @@
             class="com.github.wiiclipse.launch.WiiClipseLaunchShortcut"
             icon="icons/icon.png"
             id="com.github.wiiclipse.launch.shortcut"
-            label="Wii Application"
+            label="%shortcut.label"
             modes="run">
          <configurationType
                id="com.github.wiiclipse.launch.config">

@@ -11,5 +11,5 @@ public interface WiiClipseLaunchConfigurationConstants {
 
 	public static final String ATTR_DEVICE = "Connection.Device";
 	public static final String DEVICE_DEFAULT = "/dev/ttyUSB0";
-	public static final String ID_LAUNCH_C_APP = "com.github.wiiclipse.launcher.config";
+	public static final String ID_LAUNCH_C_APP = "com.github.wiiclipse.launch.config";
 }
