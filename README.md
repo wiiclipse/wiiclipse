@@ -3,6 +3,7 @@ _Eclipse CDT plugin for development of Nintendo Wii homebrew applications._
 
 WiiClipse is a Eclipse CDT plugin that adds support to create and run Nintendo Wii homebrew applications using the devkitPPC toolchain.
 
+
 ##Requirements
 * Platform: Windows, Linux, Mac
 * Eclipse IDE v3.6+ 
