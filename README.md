@@ -1,4 +1,3 @@
-
 #WiiClipse
 _Eclipse CDT plugin for development of Nintendo Wii homebrew applications._
 
