@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<template type="ProjTempl" version="1.0" supplier="WiiClipse" revision="1.0" author="Bala Torati"
+        id="HelloWorld" label="Hello World Project" description="A skeletal Symbian OS EXE project. Creates a folder for sources and another for include.">
+    <process type="com.github.wiiclipse.managedbuild.NewProject">
+		<simple name="projName" value="$(projectName)" /> 
+	</process>
+	
+	<process type="org.eclipse.cdt.core.CreateSourceFolder">
+		<simple name="projectName" value="$(projectName)"/>
+		<simple name="path" value="source"/>
+	</process>
+	
+	<process type="org.eclipse.cdt.core.AddFiles">
+		<simple name="projectName" value="$(projectName)"/>
+		<complex-array name="files">
+			<element>
+				<simple name="source" value="src/Basename.cpp"/>
+				<simple name="target" value="source/$(projectName).c"/>
+				<simple name="replaceable" value="true"/>
+			</element>
+		</complex-array>
+	</process>
+</template>

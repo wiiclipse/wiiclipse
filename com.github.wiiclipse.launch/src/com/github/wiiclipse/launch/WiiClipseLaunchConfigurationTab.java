@@ -5,6 +5,7 @@ import org.eclipse.cdt.launch.ui.CMainTab;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -27,6 +28,12 @@ public class WiiClipseLaunchConfigurationTab extends CMainTab {
 	private Text _hostNameText;
 	private Label _deviceLabel;
 	private Text _deviceText;
+
+	private final IPreferenceStore _prefStore;
+
+	public WiiClipseLaunchConfigurationTab() {
+		_prefStore = WiiClipseLaunchPlugin.getDefault().getPreferenceStore();
+	}
 
 	@Override
 	public void createControl(Composite parent) {
@@ -69,7 +76,11 @@ public class WiiClipseLaunchConfigurationTab extends CMainTab {
 		_connectionModeBox
 				.add("USB Gecko",
 						WiiClipseLaunchConfigurationConstants.CONNECTION_MODE_USB_GECKO);
-		_connectionModeBox.select(0);
+
+		int connectionMode = _prefStore
+				.getInt(WiiClipseLaunchConfigurationConstants.ATTR_CONNECTION_MODE);
+
+		_connectionModeBox.select(connectionMode);
 		_connectionModeBox.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
@@ -223,7 +234,7 @@ public class WiiClipseLaunchConfigurationTab extends CMainTab {
 					WiiClipseLaunchConfigurationConstants.DEVICE_DEFAULT);
 
 		} catch (CoreException ce) {
-			// WiiClipsePlugin.log(ce);
+			// WiiClipse.log(ce);
 		}
 		_connectionModeBox.select(mode);
 		_hostNameText.setText(hostname);

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="com.github.wiiclipse.core.preferencePages"
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="com.github.wiiclipse.core.WiiClipsePreferencePage"
+            id="com.github.wiiclipse.core.preferences"
+            name="%providerName">
+      </page>
+   </extension>
+   <extension
+         id="com.github.wiiclipse.core.marker"
+         name="WiiClipse Problem"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+   </extension>
+   <extension
+         point="org.eclipse.ui.ide.markerResolution">
+      <markerResolutionGenerator
+            class="com.github.wiiclipse.core.MarkerResolutionGenerator"
+            markerType="com.github.wiiclipse.core.marker">
+      </markerResolutionGenerator>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.github.wiiclipse.core.WiiClipsePreferenceInitializer">
+      </initializer>
+   </extension>
+
+</plugin>

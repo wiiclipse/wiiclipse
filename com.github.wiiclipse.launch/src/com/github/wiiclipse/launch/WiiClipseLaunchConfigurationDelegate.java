@@ -20,7 +20,7 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 
 import com.github.wiiclipse.core.WiiClipsePathResolver;
-import com.github.wiiclipse.core.WiiClipsePlugin;
+import com.github.wiiclipse.core.WiiClipseCorePlugin;
 
 @SuppressWarnings("restriction")
 public class WiiClipseLaunchConfigurationDelegate extends
@@ -107,7 +107,7 @@ public class WiiClipseLaunchConfigurationDelegate extends
 
 	@Override
 	protected String getPluginID() {
-		return WiiClipsePlugin.ID;
+		return WiiClipseCorePlugin.PLUGIN_ID;
 	}
 
 }

@@ -91,5 +91,20 @@
          </contextualLaunch>
       </shortcut>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="com.github.wiiclipse.core.preferences"
+            class="com.github.wiiclipse.launch.PreferencePage"
+            id="com.github.wiiclipse.launch.preferences"
+            name="Run">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.github.wiiclipse.launch.WiiClipseLaunchPreferenceInitializer">
+      </initializer>
+   </extension>
 
 </plugin>

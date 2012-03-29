@@ -9,8 +9,8 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 
 public class WiiClipsePathResolver {
-	private static boolean __checked = false;
-
+	private static boolean checked = false;
+	
 	private static IPath __devkitProPath = null;
 	private static IPath __devkitPPCPath = null;
 	private static IPath __devkitPPCBinPath = null;
@@ -28,10 +28,10 @@ public class WiiClipsePathResolver {
 	private static final String LIBOGC_DEFAULT_REL_PATH = "libogc/";
 
 	public static void resolvePaths() {
-		if (__checked)
+		if (checked)
 			return;
 
-		__checked = true;
+		checked = true;
 
 		boolean isWindows = Platform.OS_WIN32.equals(Platform.getOS());
 
@@ -100,37 +100,37 @@ public class WiiClipsePathResolver {
 	}
 
 	public static IPath getDevkitPPCBinPath() {
-		if (!__checked)
+		if (!checked)
 			resolvePaths();
 		return __devkitPPCBinPath;
 	}
 
 	public static IPath getDevkitPPCPath() {
-		if (!__checked)
+		if (!checked)
 			resolvePaths();
 		return __devkitPPCPath;
 	}
 
 	public static IPath getDevkitProPath() {
-		if (!__checked)
+		if (!checked)
 			resolvePaths();
 		return __devkitProPath;
 	}
 
 	public static IPath getLibOGCInlcudePath() {
-		if (!__checked)
+		if (!checked)
 			resolvePaths();
 		return __libOGCInlcudePath;
 	}
 
 	public static IPath getLibOGCLibPath() {
-		if (!__checked)
+		if (!checked)
 			resolvePaths();
 		return __libOGCLibPath;
 	}
 
 	public static IPath getLibOGCPath() {
-		if (!__checked)
+		if (!checked)
 			resolvePaths();
 		return __libOGCPath;
 	}
