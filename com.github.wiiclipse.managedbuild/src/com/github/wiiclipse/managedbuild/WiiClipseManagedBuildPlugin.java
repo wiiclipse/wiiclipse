@@ -21,13 +21,10 @@ import com.github.wiiclipse.core.WiiClipseCorePlugin;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class WiiClipseManagedBuildPlugin extends AbstractUIPlugin implements
-		ICProjectDescriptionListener {
+public class WiiClipseManagedBuildPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "com.github.wiiclipse.managedbuild"; //$NON-NLS-1$
-
-	private static final String WIICLIPSE_TARGET_PLATFORM = "com.github.wiiclipse";
 
 	// The shared instance
 	private static WiiClipseManagedBuildPlugin plugin;
@@ -71,44 +68,4 @@ public class WiiClipseManagedBuildPlugin extends AbstractUIPlugin implements
 		return plugin;
 	}
 
-	@Override
-	public void handleEvent(CProjectDescriptionEvent event) {
-		ICProjectDescription projDesc = event.getNewCProjectDescription();
-		ICConfigurationDescription[] configurations = projDesc
-				.getConfigurations();
-		for (ICConfigurationDescription config : configurations) {
-			System.out.println(config);
-			if (config.isValid()) {
-				List<String> extSettingProviders = new ArrayList<String>(
-						Arrays.asList(config.getExternalSettingsProviderIds()));
-				if (isWiiClipseConfig(config)) {
-					if (!extSettingProviders
-							.contains(WiiClipseCExternalSettingsProvider.ID)) {
-						extSettingProviders
-								.add(WiiClipseCExternalSettingsProvider.ID);
-						config.setExternalSettingsProviderIds(extSettingProviders
-								.toArray(new String[0]));
-						config.updateExternalSettingsProviders(extSettingProviders
-								.toArray(new String[0]));
-					}
-				} else if (extSettingProviders
-						.contains(WiiClipseCExternalSettingsProvider.ID)) {
-					extSettingProviders
-							.remove(WiiClipseCExternalSettingsProvider.ID);
-					config.setExternalSettingsProviderIds(extSettingProviders
-							.toArray(new String[0]));
-					config.updateExternalSettingsProviders(extSettingProviders
-							.toArray(new String[0]));
-				}
-			}
-		}
-	}
-
-	public static boolean isWiiClipseConfig(ICConfigurationDescription config) {
-		ICTargetPlatformSetting platform = config.getTargetPlatformSetting();
-		if (platform == null)
-			return false;
-
-		return platform.getId().startsWith(WIICLIPSE_TARGET_PLATFORM);
-	}
 }

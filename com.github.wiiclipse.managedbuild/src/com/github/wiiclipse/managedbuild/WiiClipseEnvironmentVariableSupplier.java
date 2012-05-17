@@ -6,9 +6,10 @@ import org.eclipse.cdt.managedbuilder.core.IConfiguration;
 import org.eclipse.cdt.managedbuilder.envvar.IBuildEnvironmentVariable;
 import org.eclipse.cdt.managedbuilder.envvar.IConfigurationEnvironmentVariableSupplier;
 import org.eclipse.cdt.managedbuilder.envvar.IEnvironmentVariableProvider;
-import org.eclipse.core.runtime.IPath;
+import org.eclipse.jface.preference.IPreferenceStore;
 
-import com.github.wiiclipse.core.WiiClipsePathResolver;
+import com.github.wiiclipse.core.WiiClipseCorePlugin;
+import com.github.wiiclipse.core.WiiClipsePreferences;
 
 public class WiiClipseEnvironmentVariableSupplier implements
 		IConfigurationEnvironmentVariableSupplier {
@@ -61,12 +62,14 @@ public class WiiClipseEnvironmentVariableSupplier implements
 		if (!PATH_VARIABLE.equalsIgnoreCase(variableName))
 			return null;
 
-		IPath binPath = WiiClipsePathResolver.getDevkitPPCBinPath();
-		if (binPath == null)
+		WiiClipseCorePlugin wiiclipse = WiiClipseCorePlugin.getDefault();
+		IPreferenceStore prefStore = wiiclipse.getPreferenceStore();
+		String path = prefStore.getString(WiiClipsePreferences.DEVKITPPC_PATH);
+		if (path == null)
 			return null;
 
 		return new EnvironentVariable(PATH_VARIABLE,
-				binPath.toFile().getPath(),
+				path,
 				IBuildEnvironmentVariable.ENVVAR_PREPEND, File.pathSeparator);
 	}
 

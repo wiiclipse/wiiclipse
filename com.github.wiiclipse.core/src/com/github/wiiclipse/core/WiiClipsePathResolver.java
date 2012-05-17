@@ -8,7 +8,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 
-public class WiiClipsePathResolver {
+class WiiClipsePathResolver {
 	private static boolean checked = false;
 	
 	private static IPath __devkitProPath = null;

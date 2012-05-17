@@ -36,12 +36,12 @@ public class WiiClipseCorePlugin extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 
-		checkPreferences();
+		WiiClipsePreferences.validate();
 		IPreferenceStore prefStore = getPreferenceStore();
 		prefStore.addPropertyChangeListener(new IPropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent event) {
-				checkPreferences();
+				WiiClipsePreferences.validate();
 			}
 		});
 	}
@@ -53,7 +53,8 @@ public class WiiClipseCorePlugin extends AbstractUIPlugin {
 		if (!checkPath(devkitProPath)) {
 			devkitProPath = WiiClipsePathResolver.getDevkitProPath();
 			if (checkPath(devkitProPath)) {
-				prefStore.setValue("DEVKITPRO_PATH", devkitProPath.toOSString());
+				prefStore
+						.setValue("DEVKITPRO_PATH", devkitProPath.toOSString());
 			} else {
 				addProblemMarker("Failed to locate devkitPro");
 			}
@@ -77,7 +78,7 @@ public class WiiClipseCorePlugin extends AbstractUIPlugin {
 		return true;
 	}
 
-	private IMarker addProblemMarker(String message) {
+	IMarker addProblemMarker(String message) {
 		IWorkspaceRoot wsRoot = ResourcesPlugin.getWorkspace().getRoot();
 		IMarker marker = null;
 		try {
@@ -91,7 +92,6 @@ public class WiiClipseCorePlugin extends AbstractUIPlugin {
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
-		IPreferenceStore prefStore = getPreferenceStore();
 		super.stop(context);
 	}
 }

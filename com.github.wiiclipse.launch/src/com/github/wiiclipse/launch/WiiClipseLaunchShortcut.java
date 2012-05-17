@@ -12,7 +12,7 @@ public class WiiClipseLaunchShortcut extends CApplicationLaunchShortcut {
 	 */
 	protected ILaunchConfigurationType getCLaunchConfigType() {
 		return getLaunchManager().getLaunchConfigurationType(
-				WiiClipseLaunchConfigurationConstants.ID_LAUNCH_C_APP);
+				WiiClipseLaunchPreferences.ID_LAUNCH_C_APP);
 	}
 
 }

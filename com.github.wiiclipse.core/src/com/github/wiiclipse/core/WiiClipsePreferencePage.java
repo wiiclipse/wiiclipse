@@ -18,12 +18,12 @@ public class WiiClipsePreferencePage extends FieldEditorPreferencePage
 	public void init(IWorkbench workbench) {
 		setPreferenceStore(WiiClipseCorePlugin.getDefault()
 				.getPreferenceStore());
-		setDescription("General WiiClipse Preferences:");
+		setDescription("General WiiClipse preferences:");
 	}
 
 	@Override
 	protected void createFieldEditors() {
-		addField(new DirectoryFieldEditor("devkitPPC.path", "devkitPPC Path",
+		addField(new DirectoryFieldEditor("devkitPPC.path", "devkitPPC.path",
 				getFieldEditorParent()));
 		addField(new DirectoryFieldEditor("libogc.path", "libogc.path",
 				getFieldEditorParent()));

@@ -9,7 +9,7 @@ public class Library {
 	private IPath incPath;
 	private IPath libPath;
 
-	public Library(String name, String basePath) {
+	public Library(String name) {
 		this.name = name;
 	}
 
@@ -33,24 +33,24 @@ public class Library {
 		return true;
 	}
 
-	private void resolvePaths(String basePath) {
-		IPath path = new Path(basePath);
-		if (!path.toFile().isDirectory())
-			return;
-
-		path = new Path(basePath).append("include");
-		if (!path.toFile().isDirectory())
-			return;
-
-		incPath = path;
-
-		path = new Path(basePath).append("lib").append("wii");
-		if (!path.toFile().isDirectory()) {
-			path = new Path(basePath).append("lib");
-			if (!path.toFile().isDirectory())
-				return;
-		}
-
-		libPath = path;
-	}
+//	private void resolvePaths(String basePath) {
+//		IPath path = new Path(basePath);
+//		if (!path.toFile().isDirectory())
+//			return;
+//
+//		path = new Path(basePath).append("include");
+//		if (!path.toFile().isDirectory())
+//			return;
+//
+//		incPath = path;
+//
+//		path = new Path(basePath).append("lib").append("wii");
+//		if (!path.toFile().isDirectory()) {
+//			path = new Path(basePath).append("lib");
+//			if (!path.toFile().isDirectory())
+//				return;
+//		}
+//
+//		libPath = path;
+//	}
 }

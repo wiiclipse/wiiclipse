@@ -33,7 +33,7 @@
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTabGroups">
       <launchConfigurationTabGroup
-            class="com.github.wiiclipse.launch.WiiClipseLaunchConfigurationTabGroup"
+            class="com.github.wiiclipse.launch.ui.WiiClipseLaunchConfigurationTabGroup"
             id="com.github.wiiclipse.launch.tabs"
             type="com.github.wiiclipse.launch.config">
       </launchConfigurationTabGroup>
@@ -95,7 +95,7 @@
          point="org.eclipse.ui.preferencePages">
       <page
             category="com.github.wiiclipse.core.preferences"
-            class="com.github.wiiclipse.launch.PreferencePage"
+            class="com.github.wiiclipse.launch.ui.WiiClipseLaunchPreferencePage"
             id="com.github.wiiclipse.launch.preferences"
             name="Run">
       </page>
@@ -103,7 +103,7 @@
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="com.github.wiiclipse.launch.WiiClipseLaunchPreferenceInitializer">
+            class="com.github.wiiclipse.launch.WiiClipseLaunchPreferences">
       </initializer>
    </extension>
 

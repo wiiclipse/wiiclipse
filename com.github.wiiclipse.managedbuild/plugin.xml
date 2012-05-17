@@ -612,11 +612,7 @@
              isAbstract="false"
              name="%Toolchain.Name"
              scannerConfigDiscoveryProfileId="com.github.wiiclipse.managedbuild.scannerConfig">
-               <builder
-                     id="com.github.wiiclipse.managedbuild.toolchain.builder.base"
-                     isAbstract="true"
-                     superClass="org.eclipse.cdt.build.core.internal.builder">
-               </builder>
+              <builder id="com.github.wiiclipse.toolchain.builder.base" superClass="cdt.managedbuild.target.gnu.builder"></builder>
                <targetPlatform
                      binaryParser="org.eclipse.cdt.core.ELF;org.github.wiiclipse.managedbuild.DolBinaryParser"
                      id="com.github.wiiclipse.managedbuild.toolchain.platform.base">
@@ -664,9 +660,9 @@
                </supportedProperties>
             </toolChain>
        <configuration
+             id="com.github.wiiclipse.managedbuild.config.base"
              cleanCommand="rm -Rf"
              errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser"
-             id="com.github.wiiclipse.managedbuild.config.base"
              name="%ConfigName.Default">
           <enablement
                 attribute="artifactExtension"
@@ -689,6 +685,8 @@
              </checkBuildProperty>
           </enablement>
        </configuration>
+       
+      <!-- WiiClipse projType-->
       <projectType
             id="com.github.wiiclipse.managedbuild.projType"
             name="WiiClipse">
@@ -720,9 +718,9 @@
                   superClass="com.github.wiiclipse.managedbuild.toolChain">
             </toolChain>
          </configuration>
-      </projectType>
+      </projectType> 
       
-      
+      <!-- Default static library projType-->
       <projectType
             buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.staticLib"
             id="com.github.wiiclipse.managedbuild.projType.lib"
@@ -739,6 +737,8 @@
             </toolChain>
          </configuration>
       </projectType>
+      
+      <!-- Executable default projType-->
       <projectType
             buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe"
             id="com.github.wiiclipse.managedbuild.projType.exe"
@@ -757,7 +757,7 @@
       </projectType>
       
    </extension>
-   <!-- <extension
+ <!--  <extension
          point="org.eclipse.ui.preferencePages">
       <page
             category="com.github.wiiclipse.core.preferences"
@@ -778,6 +778,8 @@
             name="Libraries">
       </page>
    </extension> -->
+   
+  
    <extension
          point="org.eclipse.core.contenttype.contentTypes">
       <file-association
@@ -790,23 +792,23 @@
          point="org.eclipse.cdt.core.templates">
       <template
             filterPattern=".*"
-            id="com.github.wiiclipse.managedbuild.templates.EmptyProject"
-            location="templates/projecttemplates/EmptyProject/template.xml"
+            id="com.github.wiiclipse.managedbuild.templates.Executable"
+            location="templates/project/EmptyProject/template.xml"
             projectType="com.github.wiiclipse.managedbuild.projType">
       </template>
       <template
             filterPattern=".*"
-            id="com.github.wiiclipse.managedbuild.templates.StaticLibraryProject"
-            location="templates/projecttemplates/LibraryProject/template.xml"
+            id="com.github.wiiclipse.managedbuild.templates.StaticLibrary"
+            location="templates/project/LibraryProject/template.xml"
             projectType="com.github.wiiclipse.managedbuild.projType">
       </template>
-      <template
+      <!--<template
             filterPattern=".*"
             id="com.github.wiiclipse.managedbuild.templates.HelloWorld"
             isCategory="false"
             location="templates/projecttemplates/HelloWorldProject/template.xml"
             projectType="com.github.wiiclipse.managedbuild.projType">
-      </template>
+      </template> -->
    </extension>
    <extension
          id="org.github.wiiclipse.managedbuild.DolBinaryParser"
@@ -846,7 +848,6 @@
          </simpleArray>
       </processType>
    </extension>
-   
    
 
 </plugin>

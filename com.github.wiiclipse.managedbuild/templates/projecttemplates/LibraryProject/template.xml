@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<template type="ProjTempl" version="1.0" supplier="WiiClipse" revision="1.0" author="wiiclipse.github.com"
-        id="StaticLibraryProject" label="Library Project" description="">
-    <process type="com.github.wiiclipse.managedbuild.NewProject">
-		<simple name="projName" value="$(projectName)" />
-		<simple name="projType" value="library" />
-	</process>
-</template>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<template type="ProjTempl" version="1.0" supplier="WiiClipse" revision="1.0"
+	author="wiiclipse.github.com"
+	id="Executable"
+	label="Executable" description="Empty
+	Proj Desc">
+
+	<process type="com.github.wiiclipse.managedbuild.NewProject">
+		<simple name="projName" value="$(projectName)" />
+		<simple name="projType" value="executable" />
+	</process>
+</template>
+

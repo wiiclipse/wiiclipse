@@ -28,7 +28,7 @@
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="com.github.wiiclipse.core.WiiClipsePreferenceInitializer">
+            class="com.github.wiiclipse.core.WiiClipsePreferences">
       </initializer>
    </extension>
 

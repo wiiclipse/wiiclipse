@@ -1,4 +1,4 @@
-package com.github.wiiclipse.launch;
+package com.github.wiiclipse.launch.ui;
 
 import org.eclipse.cdt.launch.ui.CArgumentsTab;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTabGroup;

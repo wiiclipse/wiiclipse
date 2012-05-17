@@ -10,7 +10,7 @@ public class WiiClipseMarkerResolution implements IMarkerResolution {
 
 	@Override
 	public String getLabel() {
-		return "Change WiiClipse preferences";
+		return "Edit WiiClipse preferences";
 	}
 
 	@Override

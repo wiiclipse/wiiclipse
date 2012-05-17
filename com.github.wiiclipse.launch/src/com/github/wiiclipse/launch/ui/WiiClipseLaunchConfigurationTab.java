@@ -1,6 +1,5 @@
-package com.github.wiiclipse.launch;
+package com.github.wiiclipse.launch.ui;
 
-import org.eclipse.cdt.launch.internal.ui.LaunchUIPlugin;
 import org.eclipse.cdt.launch.ui.CMainTab;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -19,6 +18,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+
+import com.github.wiiclipse.launch.WiiClipseLaunchPreferences;
+import com.github.wiiclipse.launch.WiiClipseLaunchPlugin;
 
 public class WiiClipseLaunchConfigurationTab extends CMainTab {
 	private Label _connectionModeLabel;
@@ -72,13 +74,13 @@ public class WiiClipseLaunchConfigurationTab extends CMainTab {
 		_connectionModeBox = new Combo(group, SWT.READ_ONLY);
 
 		_connectionModeBox.add("TCP/IP",
-				WiiClipseLaunchConfigurationConstants.CONNECTION_MODE_TCP_IP);
+				WiiClipseLaunchPreferences.CONNECTION_MODE_TCP_IP);
 		_connectionModeBox
 				.add("USB Gecko",
-						WiiClipseLaunchConfigurationConstants.CONNECTION_MODE_USB_GECKO);
+						WiiClipseLaunchPreferences.CONNECTION_MODE_USB_GECKO);
 
 		int connectionMode = _prefStore
-				.getInt(WiiClipseLaunchConfigurationConstants.ATTR_CONNECTION_MODE);
+				.getInt(WiiClipseLaunchPreferences.CONNECTION_MODE);
 
 		_connectionModeBox.select(connectionMode);
 		_connectionModeBox.addModifyListener(new ModifyListener() {
@@ -180,7 +182,7 @@ public class WiiClipseLaunchConfigurationTab extends CMainTab {
 	@Override
 	protected void updateLaunchConfigurationDialog() {
 		super.updateLaunchConfigurationDialog();
-		boolean isTCP = _connectionModeBox.getSelectionIndex() == WiiClipseLaunchConfigurationConstants.CONNECTION_MODE_TCP_IP;
+		boolean isTCP = _connectionModeBox.getSelectionIndex() == WiiClipseLaunchPreferences.CONNECTION_MODE_TCP_IP;
 		_hostNameLabel.setEnabled(isTCP);
 		_hostNameText.setEnabled(isTCP);
 
@@ -192,25 +194,21 @@ public class WiiClipseLaunchConfigurationTab extends CMainTab {
 	public void setDefaults(ILaunchConfigurationWorkingCopy config) {
 		super.setDefaults(config);
 
-		int mode = WiiClipseLaunchConfigurationConstants.CONNECTION_MODE_DEFAULT;
-		String hostname = WiiClipseLaunchConfigurationConstants.HOSTNAME_DEFAULT;
-		String device = WiiClipseLaunchConfigurationConstants.DEVICE_DEFAULT;
-		String envVar = System.getenv("WIILOAD");
-		if (envVar != null && envVar.length() != 0) {
-			if (envVar.toLowerCase().startsWith("tcp:")) {
-				mode = WiiClipseLaunchConfigurationConstants.CONNECTION_MODE_TCP_IP;
-				hostname = envVar.substring(4);
-			} else {
-				mode = WiiClipseLaunchConfigurationConstants.CONNECTION_MODE_USB_GECKO;
-				device = envVar;
-			}
-		}
+		// initialise from preference store
+
+		String hostname = _prefStore
+				.getString(WiiClipseLaunchPreferences.HOSTNAME);
+		String device = _prefStore
+				.getString(WiiClipseLaunchPreferences.DEVICE);
+		int mode = _prefStore
+				.getInt(WiiClipseLaunchPreferences.CONNECTION_MODE);
+
 		config.setAttribute(
-				WiiClipseLaunchConfigurationConstants.ATTR_CONNECTION_MODE,
+				WiiClipseLaunchPreferences.CONNECTION_MODE,
 				mode);
 		config.setAttribute(
-				WiiClipseLaunchConfigurationConstants.ATTR_HOSTNAME, hostname);
-		config.setAttribute(WiiClipseLaunchConfigurationConstants.ATTR_DEVICE,
+				WiiClipseLaunchPreferences.HOSTNAME, hostname);
+		config.setAttribute(WiiClipseLaunchPreferences.DEVICE,
 				device);
 	}
 
@@ -218,20 +216,22 @@ public class WiiClipseLaunchConfigurationTab extends CMainTab {
 	public void initializeFrom(ILaunchConfiguration config) {
 		super.initializeFrom(config);
 
-		String hostname = WiiClipseLaunchConfigurationConstants.HOSTNAME_DEFAULT;
-		String device = WiiClipseLaunchConfigurationConstants.DEVICE_DEFAULT;
-		int mode = WiiClipseLaunchConfigurationConstants.CONNECTION_MODE_DEFAULT;
+		String hostname = _prefStore
+				.getString(WiiClipseLaunchPreferences.HOSTNAME);
+		String device = _prefStore
+				.getString(WiiClipseLaunchPreferences.DEVICE);
+		int mode = _prefStore
+				.getInt(WiiClipseLaunchPreferences.CONNECTION_MODE);
+
 		try {
-			mode = config
-					.getAttribute(
-							WiiClipseLaunchConfigurationConstants.ATTR_CONNECTION_MODE,
-							WiiClipseLaunchConfigurationConstants.CONNECTION_MODE_DEFAULT);
+			mode = config.getAttribute(
+					WiiClipseLaunchPreferences.CONNECTION_MODE,
+					mode);
 			hostname = config.getAttribute(
-					WiiClipseLaunchConfigurationConstants.ATTR_HOSTNAME,
-					WiiClipseLaunchConfigurationConstants.HOSTNAME_DEFAULT);
+					WiiClipseLaunchPreferences.HOSTNAME,
+					hostname);
 			device = config.getAttribute(
-					WiiClipseLaunchConfigurationConstants.ATTR_DEVICE,
-					WiiClipseLaunchConfigurationConstants.DEVICE_DEFAULT);
+					WiiClipseLaunchPreferences.DEVICE, device);
 
 		} catch (CoreException ce) {
 			// WiiClipse.log(ce);
@@ -246,14 +246,14 @@ public class WiiClipseLaunchConfigurationTab extends CMainTab {
 		super.performApply(config);
 
 		config.setAttribute(
-				WiiClipseLaunchConfigurationConstants.ATTR_CONNECTION_MODE,
+				WiiClipseLaunchPreferences.CONNECTION_MODE,
 				_connectionModeBox.getSelectionIndex());
 
 		config.setAttribute(
-				WiiClipseLaunchConfigurationConstants.ATTR_HOSTNAME,
+				WiiClipseLaunchPreferences.HOSTNAME,
 				_hostNameText.getText().trim());
 
-		config.setAttribute(WiiClipseLaunchConfigurationConstants.ATTR_DEVICE,
+		config.setAttribute(WiiClipseLaunchPreferences.DEVICE,
 				_deviceText.getText().trim());
 
 	}
@@ -266,7 +266,7 @@ public class WiiClipseLaunchConfigurationTab extends CMainTab {
 		setErrorMessage(null);
 		setMessage(null);
 
-		if (_connectionModeBox.getSelectionIndex() == WiiClipseLaunchConfigurationConstants.CONNECTION_MODE_TCP_IP) {
+		if (_connectionModeBox.getSelectionIndex() == WiiClipseLaunchPreferences.CONNECTION_MODE_TCP_IP) {
 			String hostname = _hostNameText.getText().trim();
 			if (hostname.isEmpty())
 				return false;

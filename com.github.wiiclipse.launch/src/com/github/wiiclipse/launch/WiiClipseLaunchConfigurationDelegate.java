@@ -10,16 +10,16 @@ import org.eclipse.cdt.debug.core.CDebugUtils;
 import org.eclipse.cdt.debug.core.ICDTLaunchConfigurationConstants;
 import org.eclipse.cdt.launch.LaunchUtils;
 import org.eclipse.cdt.launch.internal.LocalRunLaunchDelegate;
-import org.eclipse.cdt.launch.internal.ui.LaunchMessages;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.jface.preference.IPreferenceStore;
 
-import com.github.wiiclipse.core.WiiClipsePathResolver;
 import com.github.wiiclipse.core.WiiClipseCorePlugin;
 
 @SuppressWarnings("restriction")
@@ -53,25 +53,31 @@ public class WiiClipseLaunchConfigurationDelegate extends
 			monitor.worked(5);
 			ArrayList<String> command = new ArrayList<String>(
 					1 + programArguments.length);
-			IPath wiiLoadPath = WiiClipsePathResolver.getDevkitPPCBinPath()
-					.append("wiiload");
-			command.add(wiiLoadPath.toOSString());
-			command.add(exePath.toOSString());
-			command.addAll(Arrays.asList(programArguments));
-			String[] commandArray = (String[]) command
-					.toArray(new String[command.size()]);
+			IPreferenceStore prefStore = WiiClipseLaunchPlugin.getDefault()
+					.getPreferenceStore();
+			String pathStr = prefStore
+					.getString(WiiClipseLaunchPreferences.WIILOAD_PATH);
 
-			monitor.worked(8);
-			boolean usePty = config.getAttribute(
-					ICDTLaunchConfigurationConstants.ATTR_USE_TERMINAL,
-					ICDTLaunchConfigurationConstants.USE_TERMINAL_DEFAULT);
-			Process process = exec(commandArray, getEnvironment(config), wd,
-					usePty);
-			monitor.worked(9);
-			DebugPlugin.newProcess(launch, process,
-					renderProcessLabel(commandArray[0]));
+			if (pathStr != null) {
+				IPath wiiLoadPath = new Path(pathStr).append("wiiload");
+				command.add(wiiLoadPath.toOSString());
+				command.add(exePath.toOSString());
+				command.addAll(Arrays.asList(programArguments));
+				String[] commandArray = (String[]) command
+						.toArray(new String[command.size()]);
+
+				monitor.worked(8);
+				boolean usePty = config.getAttribute(
+						ICDTLaunchConfigurationConstants.ATTR_USE_TERMINAL,
+						ICDTLaunchConfigurationConstants.USE_TERMINAL_DEFAULT);
+				Process process = exec(commandArray, getEnvironment(config),
+						wd, usePty);
+				monitor.worked(9);
+				DebugPlugin.newProcess(launch, process,
+						renderProcessLabel(commandArray[0]));
+			}
 		} catch (Exception e) {
-			//TODO log error
+			// TODO log error
 		} finally {
 			monitor.done();
 		}
@@ -82,17 +88,17 @@ public class WiiClipseLaunchConfigurationDelegate extends
 			throws CoreException {
 
 		int conMode = config.getAttribute(
-				WiiClipseLaunchConfigurationConstants.ATTR_CONNECTION_MODE,
-				WiiClipseLaunchConfigurationConstants.CONNECTION_MODE_DEFAULT);
+				WiiClipseLaunchPreferences.CONNECTION_MODE,
+				WiiClipseLaunchPreferences.CONNECTION_MODE_DEFAULT);
 		ArrayList<String> env = new ArrayList<String>();
 		String wiiloadVariable = "";
-		if (conMode == WiiClipseLaunchConfigurationConstants.CONNECTION_MODE_TCP_IP) {
+		if (conMode == WiiClipseLaunchPreferences.CONNECTION_MODE_TCP_IP) {
 			String hostname = config.getAttribute(
-					WiiClipseLaunchConfigurationConstants.ATTR_HOSTNAME, "");
+					WiiClipseLaunchPreferences.HOSTNAME, "");
 			wiiloadVariable = "tcp:" + hostname;
 		} else {
 			wiiloadVariable = config.getAttribute(
-					WiiClipseLaunchConfigurationConstants.ATTR_DEVICE, "");
+					WiiClipseLaunchPreferences.DEVICE, "");
 		}
 		wiiloadVariable = "WIILOAD=" + wiiloadVariable;
 

@@ -1,6 +1,5 @@
 package com.github.wiiclipse.launch;
 
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -46,11 +45,5 @@ public class WiiClipseLaunchPlugin extends AbstractUIPlugin {
 	 */
 	public static WiiClipseLaunchPlugin getDefault() {
 		return plugin;
-	}
-
-	@Override
-	protected void initializeDefaultPreferences(IPreferenceStore store) {
-		// TODO Auto-generated method stub
-		super.initializeDefaultPreferences(store);
 	}
 }
