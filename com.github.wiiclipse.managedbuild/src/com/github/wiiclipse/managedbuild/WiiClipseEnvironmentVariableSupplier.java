@@ -6,9 +6,12 @@ import org.eclipse.cdt.managedbuilder.core.IConfiguration;
 import org.eclipse.cdt.managedbuilder.envvar.IBuildEnvironmentVariable;
 import org.eclipse.cdt.managedbuilder.envvar.IConfigurationEnvironmentVariableSupplier;
 import org.eclipse.cdt.managedbuilder.envvar.IEnvironmentVariableProvider;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.github.wiiclipse.core.WiiClipseCorePlugin;
+import com.github.wiiclipse.core.WiiClipsePathResolver;
 import com.github.wiiclipse.core.WiiClipsePreferences;
 
 public class WiiClipseEnvironmentVariableSupplier implements
@@ -64,12 +67,12 @@ public class WiiClipseEnvironmentVariableSupplier implements
 
 		WiiClipseCorePlugin wiiclipse = WiiClipseCorePlugin.getDefault();
 		IPreferenceStore prefStore = wiiclipse.getPreferenceStore();
-		String path = prefStore.getString(WiiClipsePreferences.DEVKITPPC_PATH);
-		if (path == null)
+		IPath binPath = WiiClipsePathResolver.getBinPath(new Path(prefStore
+				.getString(WiiClipsePreferences.DEVKITPPC_PATH)));
+		if (binPath == null)
 			return null;
 
-		return new EnvironentVariable(PATH_VARIABLE,
-				path,
+		return new EnvironentVariable(PATH_VARIABLE, binPath.toOSString(),
 				IBuildEnvironmentVariable.ENVVAR_PREPEND, File.pathSeparator);
 	}
 

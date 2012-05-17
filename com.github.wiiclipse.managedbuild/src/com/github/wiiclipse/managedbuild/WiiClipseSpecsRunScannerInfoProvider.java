@@ -6,6 +6,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.github.wiiclipse.core.WiiClipseCorePlugin;
+import com.github.wiiclipse.core.WiiClipsePathResolver;
 import com.github.wiiclipse.core.WiiClipsePreferences;
 
 @SuppressWarnings("restriction")
@@ -22,7 +23,7 @@ public class WiiClipseSpecsRunScannerInfoProvider extends GCCSpecsRunSIProvider 
 			if(pathStr == null)
 				return false;
 			
-			IPath devkitPPCBinPath = new Path(pathStr);
+			IPath devkitPPCBinPath = WiiClipsePathResolver.getBinPath(new Path(pathStr));
 			if (devkitPPCBinPath != null) {
 				this.fCompileCommand = devkitPPCBinPath
 						.append(this.fCompileCommand);

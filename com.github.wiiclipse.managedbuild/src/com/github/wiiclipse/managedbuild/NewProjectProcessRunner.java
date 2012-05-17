@@ -1,5 +1,6 @@
 package com.github.wiiclipse.managedbuild;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,6 +20,8 @@ import org.eclipse.cdt.core.settings.model.ICSourceEntry;
 import org.eclipse.cdt.core.templateengine.process.ProcessFailureException;
 import org.eclipse.cdt.managedbuilder.core.BuildException;
 import org.eclipse.cdt.managedbuilder.core.IConfiguration;
+import org.eclipse.cdt.managedbuilder.core.IOption;
+import org.eclipse.cdt.managedbuilder.core.ITool;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -28,6 +31,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.github.wiiclipse.core.WiiClipseCorePlugin;
+import com.github.wiiclipse.core.WiiClipsePathResolver;
 import com.github.wiiclipse.core.WiiClipsePreferences;
 
 public class NewProjectProcessRunner extends ProcessRunnerHelper {
@@ -66,19 +70,47 @@ public class NewProjectProcessRunner extends ProcessRunnerHelper {
 		}
 	}
 
-	private void createSourceFolder(IProject project) throws CoreException {
+	private void createSourceFolder(IProject project) throws CoreException,
+			BuildException {
 		ICProjectDescription projDesc = CoreModel.getDefault()
 				.getProjectDescription(project);
+
+		IPath projectPath = project.getLocation();
+		IPath sourcePath = projectPath.append("source");
+		File srcPathFile = sourcePath.toFile();
+		if (!srcPathFile.exists()) {
+			if (!srcPathFile.mkdir()) {
+				return;
+			}
+		}
 		for (ICConfigurationDescription confDesc : projDesc.getConfigurations()) {
 			IConfiguration conf = ManagedBuildManager
 					.getConfigurationForDescription(confDesc);
-			List<ICSourceEntry> sourceEntries = new ArrayList<ICSourceEntry>(
-					Arrays.asList(conf.getSourceEntries()));
 
-			sourceEntries.add(new CSourceEntry("source", null,
-					ICSettingEntry.RESOLVED));
-			conf.setSourceEntries(sourceEntries.toArray(new ICSourceEntry[] {}));
+			IPath libogcLibPath = WiiClipsePathResolver.getLibPath(new Path(
+					prefStore.getString(WiiClipsePreferences.LIBOGC_PATH)));
+			if (libogcLibPath != null) {
+				ITool[] tools = conf
+						.getToolsBySuperClassId("com.github.wiiclipse.managedbuild.linker.base");
 
+				for (ITool tool : tools) {
+					IOption option = tool
+							.getOptionById("com.github.wiiclipse.managedbuild.linker.option.libsearch");
+					if (option != null) {
+						conf.setOption(tool, option,
+								new String[] { libogcLibPath.toString() });
+					}
+					
+					option = tool.getOptionById("com.github.wiiclipse.managedbuild.linker.option.libs");
+					if (option != null) {
+						conf.setOption(tool, option,
+								new String[] { "ogc" });
+					}
+					
+				}
+			}
+			conf.setSourceEntries(new ICSourceEntry[] { new CSourceEntry(
+					"source", null, ICSettingEntry.RESOLVED) });
 		}
 
 		CoreModel.getDefault().setProjectDescription(project, projDesc);
@@ -89,12 +121,17 @@ public class NewProjectProcessRunner extends ProcessRunnerHelper {
 		ICProjectDescription projDesc = CoreModel.getDefault()
 				.getProjectDescription(project);
 		for (ICConfigurationDescription confDesc : projDesc.getConfigurations()) {
-			applyDefaultIncludeSettings(confDesc);
-			if (buildArtefactType == EXECUTABLE_ARTEFACT_ID) {
-				applyDefaultLibrarySettings(confDesc);
+			ICFolderDescription folderDescription = confDesc
+					.getRootFolderDescription();
+			ICLanguageSetting[] languageSettings = folderDescription
+					.getLanguageSettings();
+			for (ICLanguageSetting lang : languageSettings) {
+				applyDefaultIncludeSettings(lang);
+				if (buildArtefactType == EXECUTABLE_ARTEFACT_ID) {
+					applyDefaultLibrarySettings(lang);
+				}
+				applyDefaultMacroSettings(lang);
 			}
-			applyDefaultMacroSettings(confDesc);
-
 			IConfiguration conf = ManagedBuildManager
 					.getConfigurationForDescription(confDesc);
 			conf.setBuildArtefactType(buildArtefactType);
@@ -103,86 +140,38 @@ public class NewProjectProcessRunner extends ProcessRunnerHelper {
 		CoreModel.getDefault().setProjectDescription(project, projDesc);
 	}
 
-	private void applyDefaultMacroSettings(ICConfigurationDescription confDesc) {
-		ICFolderDescription folderDescription = confDesc
-				.getRootFolderDescription();
-		ICLanguageSetting[] languageSettings = folderDescription
-				.getLanguageSettings();
-
-		for (ICLanguageSetting lang : languageSettings) {
-			ICLanguageSettingEntry[] macroSettings = lang
-					.getSettingEntries(ICSettingEntry.MACRO);
-			List<ICLanguageSettingEntry> macros = new ArrayList<ICLanguageSettingEntry>(
-					Arrays.asList(macroSettings));
-
-			macros.add(new CMacroEntry("GEKKO", "", ICSettingEntry.MACRO));
-			lang.setSettingEntries(ICSettingEntry.MACRO,
-					macros.toArray(new ICLanguageSettingEntry[0]));
-		}
-
+	private void applyDefaultMacroSettings(ICLanguageSetting lang) {
+		addSettingEntry(lang,
+				new CMacroEntry("GEKKO", "", ICSettingEntry.MACRO));
 	}
 
-	private void applyDefaultLibrarySettings(ICConfigurationDescription confDesc) {
-		ICFolderDescription folderDescription = confDesc
-				.getRootFolderDescription();
-		ICLanguageSetting[] languageSettings = folderDescription
-				.getLanguageSettings();
-
-		IPreferenceStore prefStore = WiiClipseCorePlugin.getDefault()
-				.getPreferenceStore();
-		IPath path = new Path(
-				prefStore.getString(WiiClipsePreferences.LIBOGC_PATH));
-		if (WiiClipsePreferences.isValidLibOGCPath(path)) {
-			for (ICLanguageSetting lang : languageSettings) {
-				ICLanguageSettingEntry[] libPathSettings = lang
-						.getSettingEntries(ICSettingEntry.LIBRARY_PATH);
-				List<ICLanguageSettingEntry> libPaths = new ArrayList<ICLanguageSettingEntry>(
-						Arrays.asList(libPathSettings));
-
-				libPaths.add(new CLibraryPathEntry(path,
-						ICSettingEntry.LIBRARY_PATH | ICSettingEntry.RESOLVED));
-				lang.setSettingEntries(ICSettingEntry.LIBRARY_PATH,
-						libPaths.toArray(new ICLanguageSettingEntry[0]));
-			}
+	private void applyDefaultLibrarySettings(ICLanguageSetting lang) {
+		IPath path = WiiClipsePathResolver.getLibPath(new Path(prefStore
+				.getString(WiiClipsePreferences.LIBOGC_PATH)));
+		if (path != null) {
+			addSettingEntry(lang, new CLibraryPathEntry(path.toOSString(),
+					ICSettingEntry.RESOLVED));
 		}
 	}
 
-	private void applyDefaultIncludeSettings(ICConfigurationDescription confDesc) {
-		ICFolderDescription folderDescription = confDesc
-				.getRootFolderDescription();
-		ICLanguageSetting[] languageSettings = folderDescription
-				.getLanguageSettings();
+	private void applyDefaultIncludeSettings(ICLanguageSetting lang) {
+		IPath incPath = WiiClipsePathResolver.getIncludePath(new Path(prefStore
+				.getString(WiiClipsePreferences.LIBOGC_PATH)));
+		if (incPath != null) {
+			addSettingEntry(lang, new CIncludePathEntry(incPath.toOSString(),
+					CIncludePathEntry.INCLUDE_PATH));
 
-		for (ICLanguageSetting lang : languageSettings) {
-			// libogc
-			IPreferenceStore prefStore = WiiClipseCorePlugin.getDefault()
-					.getPreferenceStore();
-			String libogcPath = prefStore
-					.getString(WiiClipsePreferences.LIBOGC_PATH);
-			if (libogcPath != null && !libogcPath.trim().isEmpty()) {
-				ICLanguageSettingEntry[] includePathSettings = lang
-						.getSettingEntries(ICSettingEntry.INCLUDE_PATH);
-				List<ICLanguageSettingEntry> includePaths = new ArrayList<ICLanguageSettingEntry>(
-						Arrays.asList(includePathSettings));
-
-				includePaths.add(new CIncludePathEntry(libogcPath,
-						CIncludePathEntry.INCLUDE_PATH));
-				lang.setSettingEntries(ICSettingEntry.INCLUDE_PATH,
-						includePaths.toArray(new ICLanguageSettingEntry[0]));
-
-			}
-
-			// GEKKO compiler symbol
-			{
-				ICLanguageSettingEntry[] macros = lang
-						.getSettingEntries(ICSettingEntry.MACRO);
-				List<ICLanguageSettingEntry> macroEntries = new ArrayList<ICLanguageSettingEntry>(
-						Arrays.asList(macros));
-				macroEntries
-						.add(new CMacroEntry("GEKKO", "", CMacroEntry.MACRO));
-				lang.setSettingEntries(ICSettingEntry.MACRO,
-						macroEntries.toArray(new ICLanguageSettingEntry[0]));
-			}
 		}
+	}
+
+	private void addSettingEntry(ICLanguageSetting setting,
+			ICLanguageSettingEntry entry) {
+		int kind = entry.getKind();
+		List<ICLanguageSettingEntry> entries = new ArrayList<ICLanguageSettingEntry>(
+				Arrays.asList(setting.getSettingEntries(kind)));
+		entries.add(entry);
+		setting.setSettingEntries(kind,
+				entries.toArray(new ICLanguageSettingEntry[] {}));
+
 	}
 }
