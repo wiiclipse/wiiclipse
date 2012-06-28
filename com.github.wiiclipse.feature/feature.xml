@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="com.github.wiiclipse.feature"
-      label="WiiClipse"
+      label="wiiclipse"
       version="1.0.0.qualifier"
-      provider-name="WiiClipse">
+      provider-name="wiiclipse">
 
    <description url="http://wiiclipse.github.com">
-      WiiClipse adds support for the DevkitPPC Toolchain to the Eclipse CDT Managed Build System.
+      wiiclipse integrates the devkitPPC toolchain into Eclipse CDT.
    </description>
 
    <copyright>
@@ -704,7 +704,7 @@ Public License instead of this License.  But first, please read
    </license>
 
    <url>
-      <update label="WiiClipse Update Site" url="http://wiiclipse.github.com/update-site/"/>
+      <update label="wiiclipse Update Site" url="http://wiiclipse.github.com/update-site/"/>
    </url>
 
    <requires>
