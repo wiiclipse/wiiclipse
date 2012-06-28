@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   
   <modelVersion>4.0.0</modelVersion>
   
@@ -31,6 +29,22 @@
   <build>
     <plugins>
       <plugin>
+      	<groupId>pl.project13.maven</groupId>
+      	<artifactId>git-commit-id-plugin</artifactId>
+      	<version>2.0.3</version>
+      	<executions>
+      		<execution>
+                        <goals>
+                            <goal>revision</goal>
+                         </goals>
+                    </execution>
+                </executions>
+		<configuration>
+                    <!-- false is default here, it prints some more information during the build -->
+                    <verbose>true</verbose>
+		</configuration>	
+	</plugin>
+      <plugin>
         <groupId>org.eclipse.tycho</groupId>
         <artifactId>tycho-maven-plugin</artifactId>
         <version>0.14.1</version>
@@ -39,7 +53,17 @@
           <includeAllDependencies>false</includeAllDependencies>
         </configuration>
       </plugin>
+<plugin>
+  <groupId>org.eclipse.tycho</groupId>
+  <artifactId>tycho-packaging-plugin</artifactId>
+  <version>0.14.1</version>
+  <configuration>
+    <format>yyyyMMddHHmm'-${git.commit.id.abbrev}'</format>
+  </configuration>
+</plugin>
 
     </plugins>
   </build>
 </project>
+
+
