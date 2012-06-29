@@ -4,7 +4,7 @@
 		version="1.0.0.qualifier">
 		<category name="wiiclipse.category"/>
 	</feature>
-	<category-def name="wiiclipse.category" label="WiiClipse">
-		<description>WiiClipse Eclipse Plugin</description>
+	<category-def name="wiiclipse.category" label="wiiclipse">
+		<description>wiiclipse Eclipse Plugin</description>
 	</category-def>
 </site>
