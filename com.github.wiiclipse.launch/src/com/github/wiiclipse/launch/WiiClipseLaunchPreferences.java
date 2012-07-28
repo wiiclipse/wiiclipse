@@ -21,6 +21,9 @@ public class WiiClipseLaunchPreferences extends AbstractPreferenceInitializer {
 	public static final String DEVICE = "Connection.Device";
 	public static final String DEVICE_DEFAULT = "/dev/ttyUSB0";
 
+	public static final String DEST_PATH = "Connection.DestPath";
+	public static final String DEST_PATH_DEFAULT = "";
+	
 	public static final String WIILOAD_PATH = "wiiload.path";
 	public static final String ID_LAUNCH_C_APP = "com.github.wiiclipse.launch.config";
 
@@ -45,7 +48,7 @@ public class WiiClipseLaunchPreferences extends AbstractPreferenceInitializer {
 				mode = WiiClipseLaunchPreferences.CONNECTION_MODE_USB_GECKO;
 				device = envVar;
 			}
-		} 
+		}
 
 		prefStore.setDefault(WiiClipseLaunchPreferences.CONNECTION_MODE, mode);
 		prefStore.setDefault(WiiClipseLaunchPreferences.HOSTNAME, hostname);
@@ -57,8 +60,9 @@ public class WiiClipseLaunchPreferences extends AbstractPreferenceInitializer {
 				.getString(WiiClipsePreferences.DEVKITPPC_PATH);
 		if (devkitPPCPath != null) {
 			IPath p = new Path(devkitPPCPath).append("bin");
-			if(p.toFile().exists()) {
-				prefStore.setDefault(WiiClipseLaunchPreferences.WIILOAD_PATH, p.toOSString());
+			if (p.toFile().exists()) {
+				prefStore.setDefault(WiiClipseLaunchPreferences.WIILOAD_PATH,
+						p.toOSString());
 			}
 		}
 

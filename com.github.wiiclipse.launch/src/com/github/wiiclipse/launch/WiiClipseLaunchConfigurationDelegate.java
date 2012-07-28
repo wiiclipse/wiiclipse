@@ -62,6 +62,15 @@ public class WiiClipseLaunchConfigurationDelegate extends
 				IPath wiiLoadPath = new Path(pathStr).append("wiiload");
 				command.add(wiiLoadPath.toOSString());
 				command.add(exePath.toOSString());
+
+				String destPath = config.getAttribute(
+						WiiClipseLaunchPreferences.DEST_PATH,
+						WiiClipseLaunchPreferences.DEST_PATH_DEFAULT);
+				destPath = destPath.trim();
+				if (!destPath.isEmpty()) {
+					command.add(destPath);
+				}
+
 				command.addAll(Arrays.asList(programArguments));
 				String[] commandArray = (String[]) command
 						.toArray(new String[command.size()]);

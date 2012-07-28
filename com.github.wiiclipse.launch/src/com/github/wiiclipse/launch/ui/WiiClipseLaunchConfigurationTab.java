@@ -19,8 +19,8 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.github.wiiclipse.launch.WiiClipseLaunchPreferences;
 import com.github.wiiclipse.launch.WiiClipseLaunchPlugin;
+import com.github.wiiclipse.launch.WiiClipseLaunchPreferences;
 
 public class WiiClipseLaunchConfigurationTab extends CMainTab {
 	private Label _connectionModeLabel;
@@ -30,6 +30,7 @@ public class WiiClipseLaunchConfigurationTab extends CMainTab {
 	private Text _hostNameText;
 	private Label _deviceLabel;
 	private Text _deviceText;
+	private Text _destPathText;
 
 	private final IPreferenceStore _prefStore;
 
@@ -75,9 +76,8 @@ public class WiiClipseLaunchConfigurationTab extends CMainTab {
 
 		_connectionModeBox.add("TCP/IP",
 				WiiClipseLaunchPreferences.CONNECTION_MODE_TCP_IP);
-		_connectionModeBox
-				.add("USB Gecko",
-						WiiClipseLaunchPreferences.CONNECTION_MODE_USB_GECKO);
+		_connectionModeBox.add("USB Gecko",
+				WiiClipseLaunchPreferences.CONNECTION_MODE_USB_GECKO);
 
 		int connectionMode = _prefStore
 				.getInt(WiiClipseLaunchPreferences.CONNECTION_MODE);
@@ -103,7 +103,7 @@ public class WiiClipseLaunchConfigurationTab extends CMainTab {
 		_hostNameText = new Text(group, SWT.SINGLE | SWT.BORDER);
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.END;
-		gridData.widthHint = 200;
+		gridData.widthHint = 300;
 		_hostNameText.setLayoutData(gridData);
 		_hostNameText.setText("192.168.0.1");
 		_hostNameText.addModifyListener(new ModifyListener() {
@@ -122,7 +122,7 @@ public class WiiClipseLaunchConfigurationTab extends CMainTab {
 		_deviceText = new Text(group, SWT.SINGLE | SWT.BORDER);
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.END;
-		gridData.widthHint = 200;
+		gridData.widthHint = 300;
 		_deviceText.setLayoutData(gridData);
 		_deviceText.setText("/dev/ttyUSB0");
 		_deviceText.addModifyListener(new ModifyListener() {
@@ -132,6 +132,22 @@ public class WiiClipseLaunchConfigurationTab extends CMainTab {
 		});
 		_deviceText.setEnabled(false);
 
+		Label destLabel = new Label(group, SWT.NONE);
+		destLabel.setText("Destination:");
+		gridData = new GridData();
+		destLabel.setLayoutData(gridData);
+
+		_destPathText = new Text(group, SWT.SINGLE | SWT.BORDER);
+		gridData = new GridData();
+		gridData.horizontalAlignment = SWT.END;
+		gridData.widthHint = 300;
+		_destPathText.setLayoutData(gridData);
+		_destPathText.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent evt) {
+				updateLaunchConfigurationDialog();
+			}
+		});
 	}
 
 	private void createApplicationGroup(Composite parent, int colSpan) {
@@ -185,7 +201,6 @@ public class WiiClipseLaunchConfigurationTab extends CMainTab {
 		boolean isTCP = _connectionModeBox.getSelectionIndex() == WiiClipseLaunchPreferences.CONNECTION_MODE_TCP_IP;
 		_hostNameLabel.setEnabled(isTCP);
 		_hostNameText.setEnabled(isTCP);
-
 		_deviceLabel.setEnabled(!isTCP);
 		_deviceText.setEnabled(!isTCP);
 	}
@@ -198,18 +213,15 @@ public class WiiClipseLaunchConfigurationTab extends CMainTab {
 
 		String hostname = _prefStore
 				.getString(WiiClipseLaunchPreferences.HOSTNAME);
-		String device = _prefStore
-				.getString(WiiClipseLaunchPreferences.DEVICE);
+		String device = _prefStore.getString(WiiClipseLaunchPreferences.DEVICE);
 		int mode = _prefStore
 				.getInt(WiiClipseLaunchPreferences.CONNECTION_MODE);
 
-		config.setAttribute(
-				WiiClipseLaunchPreferences.CONNECTION_MODE,
-				mode);
-		config.setAttribute(
-				WiiClipseLaunchPreferences.HOSTNAME, hostname);
-		config.setAttribute(WiiClipseLaunchPreferences.DEVICE,
-				device);
+		config.setAttribute(WiiClipseLaunchPreferences.CONNECTION_MODE, mode);
+		config.setAttribute(WiiClipseLaunchPreferences.HOSTNAME, hostname);
+		config.setAttribute(WiiClipseLaunchPreferences.DEVICE, device);
+		config.setAttribute(WiiClipseLaunchPreferences.DEST_PATH,
+				WiiClipseLaunchPreferences.DEST_PATH_DEFAULT);
 	}
 
 	@Override
@@ -218,20 +230,20 @@ public class WiiClipseLaunchConfigurationTab extends CMainTab {
 
 		String hostname = _prefStore
 				.getString(WiiClipseLaunchPreferences.HOSTNAME);
-		String device = _prefStore
-				.getString(WiiClipseLaunchPreferences.DEVICE);
+		String device = _prefStore.getString(WiiClipseLaunchPreferences.DEVICE);
 		int mode = _prefStore
 				.getInt(WiiClipseLaunchPreferences.CONNECTION_MODE);
 
+		String destPath = "";
 		try {
 			mode = config.getAttribute(
-					WiiClipseLaunchPreferences.CONNECTION_MODE,
-					mode);
-			hostname = config.getAttribute(
-					WiiClipseLaunchPreferences.HOSTNAME,
+					WiiClipseLaunchPreferences.CONNECTION_MODE, mode);
+			hostname = config.getAttribute(WiiClipseLaunchPreferences.HOSTNAME,
 					hostname);
-			device = config.getAttribute(
-					WiiClipseLaunchPreferences.DEVICE, device);
+			device = config.getAttribute(WiiClipseLaunchPreferences.DEVICE,
+					device);
+			destPath = config.getAttribute(
+					WiiClipseLaunchPreferences.DEST_PATH, destPath);
 
 		} catch (CoreException ce) {
 			// WiiClipse.log(ce);
@@ -239,22 +251,24 @@ public class WiiClipseLaunchConfigurationTab extends CMainTab {
 		_connectionModeBox.select(mode);
 		_hostNameText.setText(hostname);
 		_deviceText.setText(device);
+		_destPathText.setText(destPath);
 	}
 
 	@Override
 	public void performApply(ILaunchConfigurationWorkingCopy config) {
 		super.performApply(config);
 
-		config.setAttribute(
-				WiiClipseLaunchPreferences.CONNECTION_MODE,
+		config.setAttribute(WiiClipseLaunchPreferences.CONNECTION_MODE,
 				_connectionModeBox.getSelectionIndex());
 
-		config.setAttribute(
-				WiiClipseLaunchPreferences.HOSTNAME,
-				_hostNameText.getText().trim());
+		config.setAttribute(WiiClipseLaunchPreferences.HOSTNAME, _hostNameText
+				.getText().trim());
 
-		config.setAttribute(WiiClipseLaunchPreferences.DEVICE,
-				_deviceText.getText().trim());
+		config.setAttribute(WiiClipseLaunchPreferences.DEVICE, _deviceText
+				.getText().trim());
+
+		config.setAttribute(WiiClipseLaunchPreferences.DEST_PATH, _destPathText
+				.getText().trim());
 
 	}
 
